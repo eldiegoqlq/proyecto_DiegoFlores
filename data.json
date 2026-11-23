@@ -1,0 +1,177 @@
+{
+  "catalogos": {
+    "tipos": [
+      "CPU",
+      "Laptop",
+      "Monitor",
+      "Periférico"
+    ],
+    "estados": [
+      "Activo",
+      "En Mantenimiento",
+      "Dado de Baja"
+    ],
+    "ubicaciones": [
+      "Oficina Central",
+      "Almacén TI",
+      "Sala de Juntas",
+      "Recepción",
+      "Archivo",
+      "Laboratorio"
+    ],
+    "tiposActa": [
+      "Acta de entrega",
+      "Reporte de mantenimiento",
+      "Acta de devolución"
+    ]
+  },
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Diego Flores",
+      "correo": "dafp2008@gmail.com",
+      "rol": "Administrador"
+    },
+    {
+      "id": 2,
+      "nombre": "Luis Blanco",
+      "correo": "luis.blanco@dafp.gov",
+      "rol": "Técnico"
+    },
+    {
+      "id": 4,
+      "nombre": "David Garcia",
+      "correo": "david.garcia@dafp.gov",
+      "rol": "Auditor"
+    }
+  ],
+  "equipos": [
+    {
+      "id": 1,
+      "serie": "00001",
+      "marca": "Dell",
+      "modelo": "OptiPlex 7090",
+      "tipo": "CPU",
+      "ubicacion": "Almacén TI",
+      "estado": "Activo"
+    },
+    {
+      "id": 2,
+      "serie": "00002",
+      "marca": "HP",
+      "modelo": "EliteDesk 800 G6",
+      "tipo": "CPU",
+      "ubicacion": "Laboratorio",
+      "estado": "En Mantenimiento"
+    },
+    {
+      "id": 3,
+      "serie": "00003",
+      "marca": "Lenovo",
+      "modelo": "ThinkPad T14",
+      "tipo": "Laptop",
+      "ubicacion": "Almacén TI",
+      "estado": "Activo"
+    },
+    {
+      "id": 4,
+      "serie": "00004",
+      "marca": "Dell",
+      "modelo": "OptiPlex 7090",
+      "tipo": "CPU",
+      "ubicacion": "Laboratorio",
+      "estado": "Activo"
+    },
+    {
+      "id": 5,
+      "serie": "00005",
+      "marca": "LG",
+      "modelo": "FLATRON W1943C",
+      "tipo": "Monitor",
+      "ubicacion": "Laboratorio",
+      "estado": "Activo"
+    }
+  ],
+  "mantenimientos": [
+    {
+      "id": 3,
+      "equipoId": 1,
+      "fecha": "2026-11-12",
+      "tipo": "Preventivo",
+      "tecnico": "Luis Blanco",
+      "estado": "Completado",
+      "detalle": "Limpieza interna y cambio de pasta térmica"
+    },
+    {
+      "id": 6,
+      "equipoId": 4,
+      "fecha": "2026-11-06",
+      "tipo": "Correctivo",
+      "tecnico": "Luis Blanco",
+      "estado": "Completado",
+      "detalle": "Ingreso registrado desde edición"
+    },
+    {
+      "id": 1,
+      "equipoId": 2,
+      "fecha": "2026-11-03",
+      "tipo": "Correctivo",
+      "tecnico": "Luis Blanco",
+      "estado": "En curso",
+      "detalle": "Falla en fuente de poder"
+    },
+    {
+      "id": 5,
+      "equipoId": 3,
+      "fecha": "2026-10-20",
+      "tipo": "Preventivo",
+      "tecnico": "Luis Blanco",
+      "estado": "Completado",
+      "detalle": "Revisión general"
+    }
+  ],
+  "actas": [
+    {
+      "id": 1,
+      "tipoDocumento": "Acta de entrega",
+      "equipoId": 3,
+      "responsable": "Laura Méndez",
+      "fecha": "2026-10-28",
+      "descripcion": "Entrega de laptop ThinkPad T14 en buen estado, con cargador y maletín.",
+      "firma": null,
+      "creadaPor": "Luis Blanco"
+    }
+  ],
+  "historial": [
+    {
+      "equipoId": 2,
+      "fecha": "2026-11-03",
+      "evento": "Ingresó a mantenimiento correctivo (falla en fuente de poder)"
+    },
+    {
+      "equipoId": 3,
+      "fecha": "2026-10-20",
+      "evento": "Mantenimiento preventivo completado"
+    },
+    {
+      "equipoId": 3,
+      "fecha": "2026-10-28",
+      "evento": "Acta de entrega #1 generada"
+    },
+    {
+      "equipoId": 4,
+      "fecha": "2026-11-06",
+      "evento": "Equipo registrado en el inventario"
+    },
+    {
+      "equipoId": 1,
+      "fecha": "2026-11-12",
+      "evento": "Mantenimiento preventivo completado"
+    },
+    {
+      "equipoId": 5,
+      "fecha": "2026-11-18",
+      "evento": "Equipo registrado en el inventario"
+    }
+  ]
+}

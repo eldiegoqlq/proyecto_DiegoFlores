@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sistema institucional de control de inventario, gestión de mantenimientos preventivos/correctivos y emisión de actas técnicas digitales para el DAFP.">
+  <title>DAFP Soporte técnico</title>
+  
+  <!-- Optimización de carga tipográfica (DNS Preconnect) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-rol="Administrador">
+
+  <!-- CABECERA INSTITUCIONAL Y NAVEGACIÓN -->
+  <header class="topbar" role="banner">
+    <div class="topbar__inner">
+      <a href="#inicio" class="brand" aria-label="DAFP Soporte técnico - Ir al inicio">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+          <rect x="2" y="4" width="30" height="20" rx="3" fill="#1769FF"/>
+          <rect x="12" y="26" width="10" height="3" rx="1" fill="#0B2447"/>
+          <rect x="8" y="29" width="18" height="2" rx="1" fill="#0B2447"/>
+          <circle cx="17" cy="14" r="5" fill="none" stroke="#fff" stroke-width="2.4" stroke-dasharray="3 1.6"/>
+          <circle cx="17" cy="14" r="1.8" fill="#fff"/>
+        </svg>
+        <span>DAFP <small>Soporte técnico</small></span>
+      </a>
+
+      <button class="burger" id="burger" type="button" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav">☰</button>
+
+      <nav class="nav" id="nav" aria-label="Navegación principal">
+        <a href="#inicio" class="is-active">Inicio</a>
+        <a href="#inventario">Inventario</a>
+        <a href="#mantenimientos">Mantenimientos</a>
+        <a href="#actas">Actas y Reportes</a>
+        <a href="#usuarios" data-roles="Administrador">Usuarios</a>
+      </nav>
+
+      <div class="topbar__tools">
+        <div class="search" role="search">
+          <label for="buscadorSerie" class="sr-only">Buscar equipo por número de serie</label>
+          <input type="search" id="buscadorSerie" placeholder="Buscar por n.º de serie" autocomplete="off" spellcheck="false">
+        </div>
+
+        <button class="icon-btn" id="btnSincronizarJson" type="button" title="Guardar y sincronizar con data.json" aria-label="Guardar y sincronizar data.json">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+        </button>
+
+        <div class="menu-wrap">
+          <button class="icon-btn" id="btnNotif" type="button" aria-label="Notificaciones del sistema" aria-expanded="false" aria-controls="notifPanel">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/>
+            </svg>
+            <span class="badge-dot" id="notifCount" aria-live="polite">0</span>
+          </button>
+          <div class="dropdown" id="notifPanel" hidden></div>
+        </div>
+
+        <div class="menu-wrap">
+          <button class="user" id="btnUser" type="button" aria-expanded="false" aria-controls="userPanel">
+            <span class="avatar" id="avatar" aria-hidden="true">DF</span>
+            <span class="user__txt">
+              <strong id="userName">Diego Flores</strong>
+              <small id="userRole">Administrador</small>
+            </span>
+          </button>
+          <div class="dropdown" id="userPanel" hidden>
+            <p class="dropdown__title">Cambiar de rol (demostración)</p>
+            <select id="selRol" aria-label="Seleccionar rol activo"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="contenido-principal">
+    
+    <!-- HERO PROMOCIONAL -->
+    <section class="hero" id="inicio" aria-labelledby="tituloHero">
+      <div class="wrap hero__grid">
+        <div>
+          <h1 id="tituloHero">Tus equipos, siempre a la vista</h1>
+          <p class="hero__sub">Registra, da seguimiento y genera tus actas en PDF en un clic.</p>
+          <div class="hero__cta">
+            <a href="#formEquipo" class="btn btn--primary" data-roles="Administrador,Técnico" id="ctaNuevo">Registrar nuevo equipo</a>
+            <a href="#inventario" class="btn btn--ghost">Ver inventario</a>
+          </div>
+        </div>
+        
+        <!-- Ilustración vectorial aislada semánticamente -->
+        <figure class="hero__figure" aria-hidden="true">
+          <svg class="hero__art" viewBox="0 0 520 340" role="img" focusable="false">
+            <rect x="10" y="10" width="500" height="300" rx="16" fill="#fff" stroke="#E3E8F0"/>
+            <rect x="10" y="10" width="500" height="36" rx="16" fill="#0B2447"/>
+            <rect x="10" y="30" width="500" height="16" fill="#0B2447"/>
+            <circle cx="32" cy="28" r="5" fill="#1769FF"/><circle cx="50" cy="28" r="5" fill="#5B8DEF"/><circle cx="68" cy="28" r="5" fill="#9DB7F5"/>
+            <rect x="30" y="64" width="110" height="64" rx="10" fill="#EAF1FF"/><rect x="44" y="78" width="40" height="8" rx="4" fill="#1769FF"/><rect x="44" y="98" width="62" height="14" rx="4" fill="#0B2447"/>
+            <rect x="155" y="64" width="110" height="64" rx="10" fill="#FFF4E0"/><rect x="169" y="78" width="40" height="8" rx="4" fill="#E8A100"/><rect x="169" y="98" width="40" height="14" rx="4" fill="#0B2447"/>
+            <rect x="280" y="64" width="110" height="64" rx="10" fill="#E7F7EE"/><rect x="294" y="78" width="40" height="8" rx="4" fill="#1E9E5A"/><rect x="294" y="98" width="52" height="14" rx="4" fill="#0B2447"/>
+            <rect x="405" y="64" width="85" height="64" rx="10" fill="#F3F5F9"/><rect x="419" y="78" width="30" height="8" rx="4" fill="#8A94A6"/><rect x="419" y="98" width="36" height="14" rx="4" fill="#0B2447"/>
+            <g fill="#F3F5F9"><rect x="30" y="146" width="460" height="30" rx="8"/><rect x="30" y="184" width="460" height="30" rx="8"/><rect x="30" y="222" width="460" height="30" rx="8"/><rect x="30" y="260" width="460" height="30" rx="8"/></g>
+            <g fill="#C5CEDD"><rect x="44" y="157" width="90" height="8" rx="4"/><rect x="44" y="195" width="80" height="8" rx="4"/><rect x="44" y="233" width="100" height="8" rx="4"/><rect x="44" y="271" width="70" height="8" rx="4"/></g>
+            <rect x="396" y="154" width="76" height="14" rx="7" fill="#CDEFD9"/><rect x="396" y="192" width="76" height="14" rx="7" fill="#FFE6B3"/><rect x="396" y="230" width="76" height="14" rx="7" fill="#CDEFD9"/><rect x="396" y="268" width="76" height="14" rx="7" fill="#F6C9C9"/>
+          </svg>
+        </figure>
+      </div>
+    </section>
+
+    <!-- TARJETAS DE RESUMEN MÉTRICO -->
+    <section class="wrap cards" aria-label="Métricas del sistema" id="resumen">
+      <article class="card-stat">
+        <span class="card-stat__icon c-blue" aria-hidden="true">🖥</span>
+        <div><p>Total de Equipos</p><strong id="statTotal">0</strong></div>
+      </article>
+      <article class="card-stat">
+        <span class="card-stat__icon c-amber" aria-hidden="true">🔧</span>
+        <div><p>En Mantenimiento</p><strong id="statMant">0</strong></div>
+      </article>
+      <article class="card-stat">
+        <span class="card-stat__icon c-red" aria-hidden="true">⏳</span>
+        <div><p>Mantenimientos Pendientes</p><strong id="statPend">0</strong></div>
+      </article>
+      <article class="card-stat">
+        <span class="card-stat__icon c-green" aria-hidden="true">📄</span>
+        <div><p>Últimas Actas Generadas</p><strong id="statActas">0</strong><small id="statActasSub"></small></div>
+      </article>
+    </section>
+
+    <div class="wrap" id="avisoDatos" role="alert" aria-live="assertive" hidden></div>
+
+    <!-- INVENTARIO DE EQUIPOS -->
+    <section class="wrap panel" id="inventario" aria-labelledby="tituloInventario">
+      <div class="panel__head">
+        <h2 id="tituloInventario">Inventario de equipos</h2>
+        <div class="actions">
+          <p class="muted" id="conteoResultados" role="status" aria-live="polite"></p>
+          <button class="btn btn--excel btn--sm" id="btnExportarExcel" type="button" title="Descargar inventario completo en formato Excel (.xlsx)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <path d="M8 13h8"/>
+              <path d="M8 17h8"/>
+              <path d="M10 9H8"/>
+            </svg>
+            Exportar a Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de filtrado reactivo -->
+      <div class="filters" role="search" aria-label="Filtros de equipos">
+        <label for="fCategoria">Categoría
+          <select id="fCategoria"></select>
+        </label>
+        <label for="fEstado">Estado
+          <select id="fEstado"></select>
+        </label>
+        <label for="fUbicacion">Ubicación
+          <select id="fUbicacion"></select>
+        </label>
+        <button class="btn btn--ghost btn--sm" id="btnLimpiar" type="button">Limpiar filtros</button>
+        <button class="btn btn--excel btn--sm" id="btnExcelFiltros" type="button" title="Descargar todos los equipos en archivo Excel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <path d="M8 13h8"/>
+            <path d="M8 17h8"/>
+            <path d="M10 9H8"/>
+          </svg>
+          Descargar Excel
+        </button>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <caption class="sr-only">Listado de equipos de cómputo en inventario</caption>
+          <thead>
+            <tr>
+              <th scope="col">Serie</th>
+              <th scope="col">Equipo</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Ubicación</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyEquipos"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pager" aria-label="Paginación de equipos"></div>
+    </section>
+
+    <!-- MANTENIMIENTOS -->
+    <section class="wrap panel" id="mantenimientos" aria-labelledby="tituloMant">
+      <div class="panel__head">
+        <h2 id="tituloMant">Mantenimientos</h2>
+        <p class="muted">Pendientes, en curso y completados</p>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <caption class="sr-only">Registro de mantenimientos técnicos preventivos y correctivos</caption>
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Equipo</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Técnico</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="right" data-roles="Administrador,Técnico">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyMant"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FORMULARIOS TÉCNICOS -->
+    <section class="wrap forms" id="actas">
+      
+      <!-- Formulario: Alta de equipos -->
+      <form class="panel" id="formEquipo" novalidate data-roles="Administrador,Técnico" aria-labelledby="tituloFormEquipo">
+        <div class="panel__head">
+          <h2 id="tituloFormEquipo">Nuevo equipo</h2>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="campoEquipoSerie">Número de serie</label>
+            <input id="campoEquipoSerie" name="serie" placeholder="00001" autocomplete="off" inputmode="numeric" maxlength="5" pattern="[0-9]{5}">
+            <span class="err"></span>
+          </div>
+          <div class="field">
+            <label for="campoEquipoMarca">Marca</label>
+            <input id="campoEquipoMarca" name="marca" placeholder="Dell" autocomplete="off">
+            <span class="err"></span>
+          </div>
+          <div class="field">
+            <label for="campoEquipoModelo">Modelo</label>
+            <input id="campoEquipoModelo" name="modelo" placeholder="OptiPlex 7090" autocomplete="off">
+            <span class="err"></span>
+          </div>
+          <div class="field">
+            <label for="campoEquipoTipo">Tipo</label>
+            <select id="campoEquipoTipo" name="tipo"></select>
+            <span class="err"></span>
+          </div>
+          <div class="field span2">
+            <label for="campoEquipoUbicacion">Ubicación</label>
+            <select id="campoEquipoUbicacion" name="ubicacion"></select>
+            <span class="err"></span>
+          </div>
+        </div>
+        <button class="btn btn--primary" type="submit">Guardar equipo</button>
+      </form>
+
+      <!-- Formulario: Emisión de actas técnicas -->
+      <form class="panel" id="formActa" novalidate data-roles="Administrador,Técnico" aria-labelledby="tituloFormActa">
+        <div class="panel__head panel__head--with-icon">
+          <div class="panel__head-title-wrap">
+            <div class="panel__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                <rect x="8" y="2" width="8" height="4" rx="1"/>
+                <path d="M10.4 12.6a2 2 0 1 1 3 3L9 20l-3 1 1-3Z"/>
+                <path d="m14.5 9.5 2 2"/>
+              </svg>
+            </div>
+            <div>
+              <h2 id="tituloFormActa">Acta / Reporte técnico</h2>
+              <p class="panel__subtitle">Genera el documento PDF al guardar</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid2">
+          <div class="field">
+            <label for="tipoDocumento">Tipo de documento</label>
+            <select name="tipoDocumento" id="tipoDocumento">
+              <option value="Acta de entrega">Acta de entrega</option>
+              <option value="Reporte de mantenimiento">Reporte de mantenimiento</option>
+              <option value="Acta de devolución">Acta de devolución</option>
+            </select>
+            <span class="err"></span>
+          </div>
+
+          <div class="field">
+            <label for="equipoId">Equipo</label>
+            <select name="equipoId" id="equipoId"></select>
+            <span class="err"></span>
+          </div>
+
+          <div class="field">
+            <label for="campoActaResponsable">Responsable</label>
+            <input id="campoActaResponsable" name="responsable" placeholder="Nombre completo" autocomplete="name">
+            <span class="err"></span>
+          </div>
+
+          <div class="field">
+            <label for="campoActaFecha">Fecha</label>
+            <input type="date" id="campoActaFecha" name="fecha">
+            <span class="err"></span>
+          </div>
+
+          <div class="field span2">
+            <div class="field__header">
+              <label for="descActa">Descripción técnica</label>
+              <span class="field__counter" id="descCounter" aria-live="polite">0 / 500</span>
+            </div>
+            <textarea name="descripcion" id="descActa" rows="3" maxlength="500" placeholder="Estado del equipo, accesorios entregados, intervención realizada..."></textarea>
+            <span class="err"></span>
+          </div>
+
+          <div class="field span2">
+            <div class="field__header">
+              <label for="firma">Firma digital</label>
+              <button type="button" class="btn-clear-sign" id="btnBorrarFirma" aria-label="Limpiar trazo de firma digital">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21Z"/>
+                  <path d="M22 21H7"/>
+                  <path d="m5 11 9 9"/>
+                </svg>
+                <span>Borrar firma</span>
+              </button>
+            </div>
+            <canvas id="firma" width="520" height="130" aria-label="Lienzo para captura de firma manuscrita"></canvas>
+            <span class="err" id="errFirma"></span>
+          </div>
+        </div>
+
+        <button class="btn btn--primary" type="submit">Generar acta</button>
+      </form>
+    </section>
+
+    <!-- VISOR DE DOCUMENTOS -->
+    <section class="wrap panel" id="visor" aria-labelledby="tituloVisor">
+      <div class="panel__head">
+        <h2 id="tituloVisor">Visualizador de documentos</h2>
+        <div class="actions">
+          <select id="selActa" aria-label="Seleccionar acta para previsualización"></select>
+          <button class="btn btn--ghost btn--sm" id="btnImprimir" type="button">Imprimir</button>
+          <button class="btn btn--primary btn--sm" id="btnPdf" type="button">Descargar PDF</button>
+        </div>
+      </div>
+      <div class="doc" id="docPreview" aria-live="polite">
+        <p class="muted">Genera o selecciona un acta para ver su vista previa.</p>
+      </div>
+    </section>
+
+    <!-- USUARIOS Y PERMISOS -->
+    <section class="wrap panel" id="usuarios" data-roles="Administrador" aria-labelledby="tituloUsuarios">
+      <div class="panel__head">
+        <h2 id="tituloUsuarios">Usuarios y permisos</h2>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <caption class="sr-only">Listado de usuarios institucionales y asignación de roles</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Rol</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyUsuarios"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="footer" role="contentinfo">
+    <div class="wrap footer__grid">
+      <div>
+        <strong>DAFP Soporte técnico</strong>
+        <p>Inventario, mantenimientos y actas de equipos de cómputo.</p>
+      </div>
+      <div>
+        <strong>Enlaces rápidos</strong>
+        <a href="#inventario">Inventario</a>
+        <a href="#mantenimientos">Mantenimientos</a>
+        <a href="#actas">Actas y Reportes</a>
+      </div>
+      <div>
+        <strong>Soporte institucional</strong>
+        <a href="mailto:soporte@dafp.gov">soporte@dafp.gov</a>
+        <span>Lunes a viernes, 8:00 a 17:00</span>
+      </div>
+    </div>
+    <p class="footer__copy">© 2026 DAFP Soporte técnico. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- MODAL Y NOTIFICACIÓN TOAST ACCESIBLES -->
+  <dialog id="dlg" aria-modal="true">
+    <div id="dlgBody"></div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- DEPENDENCIAS EXTERNAS Y SCRIPT PRINCIPAL -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
